@@ -1,23 +1,20 @@
 const mailText = document.getElementById("mail-text");
 mailText.innerText = 'Загрузка...';
 
-let mail = 'error load mail';
-
-newMail();
-function newMail(){
-    fetch('/newMail').
+getMail();
+function getMail(){
+    fetch("/get_mail").
     then(response => response.json()).
     then(data => {
-        mail = data.mail;
+        mailText.innerText = data.mail;
     }).
     catch(err => {
-        console.log(err);
+        console.error(err);
+        mailText.innerText = 'error load mail';
     });
-    mailText.innerText = mail;
 }
 
 document.getElementById("copy-button").addEventListener("click", copyMail);
-
 function copyMail(event) {
     event.preventDefault();
     navigator.clipboard.writeText(mailText.innerText).
@@ -29,22 +26,25 @@ function copyMail(event) {
     });
 }
 
+var socket = new WebSocket("ws://localhost:8080/getMessages")
+socket.onopen = function(event) {
+    console.log("connection open");
+};
+socket.onmessage = function(event) {
+    console.log("message:", event.data);
+};
+socket.onclose = function(event ){
+    console.log("connection close");
+};
+
+window.addEventListener('beforeunload', function(){
+    socket.close();
+})
+
+// socket.send(msg);
+
 windowMessages = document.getElementById("window-messages");
 
-createNewMessage("testSender", "testTheme", "#")
-createNewMessage("testSender", "testTheme", "#")
-createNewMessage("testSender", "testTheme", "#")
-createNewMessage("testSender", "testTheme", "#")
-createNewMessage("testSender", "testTheme", "#")
-createNewMessage("testSender", "testTheme", "#")
-createNewMessage("testSender", "testTheme", "#")
-createNewMessage("testSender", "testTheme", "#")
-createNewMessage("testSender", "testTheme", "#")
-createNewMessage("testSender", "testTheme", "#")
-createNewMessage("testSender", "testTheme", "#")
-createNewMessage("testSender", "testTheme", "#")
-createNewMessage("testSender", "testTheme", "#")
-createNewMessage("testSender", "testTheme", "#")
 createNewMessage("testSender", "testTheme", "#")
 
 function createNewMessage(sender, theme, sendURL){
@@ -64,8 +64,6 @@ function createNewMessage(sender, theme, sendURL){
     div = document.createElement("div");
     div.className = "arrow";
     msg.appendChild(div);
-
-
 
     let refresh = document.createElement("a");
     refresh.href = sendURL;

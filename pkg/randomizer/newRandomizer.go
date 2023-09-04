@@ -10,6 +10,5 @@ type Randomizer interface {
 }
 
 func New() Randomizer {
-	random := rand.New(rand.NewSource(time.Now().UnixNano()))
-	return random
+	return rand.New(rand.NewSource(time.Now().UnixNano()))
 }

@@ -1,4 +1,4 @@
-package api
+package gDomains
 
 import (
 	"encoding/json"
@@ -14,12 +14,12 @@ func GetDomains() ([]string, error) {
 		return nil, err
 	}
 
-	domains, err := decodeJSON(response)
+	domains, err := decodeJSON[string](response)
 	return domains, err
 }
 
-func decodeJSON(response *http.Response) ([]string, error) {
-	var content []string
+func decodeJSON[T any](response *http.Response) ([]T, error) {
+	var content []T
 
 	bytes, err := io.ReadAll(response.Body)
 	if err != nil {
