@@ -1,0 +1,47 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
+.message {
+    align-self: center;
+    justify-self: center;
+    width: 95%;
+    height: 85%;
+    background-color: var(--secondary-color);
+    margin: 10px 5px 5px 5px;
+    border-radius: 20px;
+    overflow: auto;
+}
+
+.block-message {
+    text-decoration: #211f1f 10px dashed;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 5px 5px 5px;
+}
+
+.line {
+    border-bottom: 1px dashed black;
+}
+
+.sender {
+    text-align: left;
+    overflow: hidden;
+    overflow-wrap: break-word;
+}
+
+.date {
+    text-align: right;
+}
+
+p {
+    font-size: 2.5dvh;
+    white-space: pre-line;
+    text-overflow: ellipsis;
+    margin: 10px 5px 5px 5px;
+}
+
+.inline {
+    display: inline-block;
+}

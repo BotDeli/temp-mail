@@ -1,53 +1,53 @@
-const mailText = document.getElementById("mail-text");
-mailText.innerText = 'Загрузка...';
-
-getMail();
-function getMail(){
-    fetch("/get_mail").
-    then(response => response.json()).
-    then(data => {
-        mailText.innerText = data.mail;
-    }).
-    catch(err => {
-        console.error(err);
-        mailText.innerText = 'error load mail';
-    });
-}
-
-document.getElementById("copy-button").addEventListener("click", copyMail);
-function copyMail(event) {
-    event.preventDefault();
-    navigator.clipboard.writeText(mailText.innerText).
-    then(() => {
-        alert("successful copied")
-    }).
-    catch(() => {
-        console.log("failed to copy")
-    });
-}
-
 var socket = new WebSocket("ws://localhost:8080/getMessages")
 socket.onopen = function(event) {
     console.log("connection open");
 };
+
 socket.onmessage = function(event) {
-    console.log("message:", event.data);
+    let data = event.data.slice(1, -2).split(",");
+    let messages = decodeMessages(data);
+    let ids = getHaveId();
+    for (let i = 0; i < messages.length; i+=3){
+        if (!isIds(ids, messages[i])){
+            createNewMessage(messages[i], messages[i+1], messages[i+2], "#")
+        } else {
+            break
+        }
+    }
 };
-socket.onclose = function(event ){
-    console.log("connection close");
-};
 
-window.addEventListener('beforeunload', function(){
-    socket.close();
-})
+function decodeMessages(data) {
+    let messages = [];
+    let limit = data.length;
+    for (let i = 0; i < limit; i+=3) {
+        messages.push(data[i].toString().slice(6));
+        messages.push(data[i+1].toString().slice(8, -1));
+        messages.push(data[i+2].toString().slice(11, -2));
+    }
+    return messages;
+}
 
-// socket.send(msg);
+windowMessages = document.getElementById("down-window");
 
-windowMessages = document.getElementById("window-messages");
+function getHaveId(){
+    let nodes = windowMessages.children;
+    let ids = [];
+    for (let i = 1; i < nodes.length; i++){
+        ids.push(nodes.item(i).id);
+    }
+    return ids
+}
 
-createNewMessage("testSender", "testTheme", "#")
+function isIds(ids, targetId){
+    for (let i = 0; i < ids.length; i++){
+        if (ids[i].toString() === targetId.toString()){
+            return true;
+        }
+    }
+    return false;
+}
 
-function createNewMessage(sender, theme, sendURL){
+function createNewMessage(id, sender, theme){
     let msg = document.createElement("div");
     msg.className = "message";
 
@@ -66,9 +66,19 @@ function createNewMessage(sender, theme, sendURL){
     msg.appendChild(div);
 
     let refresh = document.createElement("a");
-    refresh.href = sendURL;
+    refresh.href = "http://localhost:8080/message?id="+id;
     refresh.className = "message-link";
     refresh.appendChild(msg);
 
+    refresh.id = id;
+
     windowMessages.appendChild(refresh);
 }
+
+socket.onclose = function(event ){
+    console.log("connection close");
+};
+
+window.addEventListener('beforeunload', function(){
+    socket.close();
+})

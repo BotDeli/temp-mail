@@ -10,4 +10,5 @@ func InitHandlers(router *gin.Engine, sm mails.StorageMails, sc connections.Stor
 	router.GET("/", loadMainPage)
 	router.GET("/get_mail", handlerGetMail(sm))
 	router.GET("/getMessages", handleWBGetMessages(sm, sc))
+	router.GET("/message/:id", handlerGetMessage())
 }

@@ -7,8 +7,8 @@
 
 	<link rel="icon" type="image/x-icon" href="../images/main.ico">
 
+	<link rel="stylesheet" href="../static/view.css">
 	<link rel="stylesheet" href="../static/all.css">
-	<link rel="stylesheet" href="../static/main.css">
 </head>
 <body>
 	<div class="top-panel">
@@ -29,13 +29,31 @@
 		</div>
 		<div id="down-window">
 			<div class="top">
-				<div class="top-content">ОТПРАВИТЕЛЬ</div>
-				<div class="top-content">ТЕМА</div>
-				<div class="top-content">ПРОСМОТР</div>
+				<a href="http://localhost:8080/" class="top-content"><-- ВЕРНУТЬСЯ НАЗАД</a>
+			</div>
+			<div class="message">
+				<div class="block-message line">
+					<div class="sender">
+						<p>Отправитель:</p>
+						<p id="sender-message">{{.Sender}}</p>
+					</div>
+					<div class="date">
+						<p>Дата:</p>
+						<p id="date-message">{{.Date}}</p>
+					</div>
+				</div>
+				<div class="block-message line">
+					<div class="subject">
+						<p class="inline">Тема: </p>
+						<p id="subject-message" class="inline">{{.Subject}}</p>
+					</div>
+				</div>
+				<div class="block-message">
+					<p id="content-message">{{.Content}}</p>
+				</div>
 			</div>
 		</div>
 	</main>
-	<script type="text/javascript" src="../static/main.js"></script>
 	<script type="text/javascript" src="../static/mail.js"></script>
 </body>
 </html>

@@ -1,10 +1,10 @@
 package handlers
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 	"log"
+	"temp-mail/internal/api/gMessages"
 	"temp-mail/internal/server/cookie"
 	"temp-mail/internal/storage/connections"
 	"temp-mail/internal/storage/mails"
@@ -33,28 +33,24 @@ func handleWBGetMessages(sm mails.StorageMails, sc connections.StorageConnection
 		if err != nil {
 			return
 		}
+
 		sc.StartLifeConnection(uuid)
-		defer closeConnection(conn)
 
 		mail, err := sm.GetMail(uuid)
 
+		var messages []gMessages.Message
+
 		for sc.IsLifeConnection(uuid) {
-			//msg, p, err := conn.ReadMessage()
-			//if err != nil {
-			//	fmt.Println(err)
-			//	return
-			//}
+			//msg, p, _ := conn.ReadMessage()
 			//fmt.Println(msg, string(p))
-			//
-			//response := []byte("Test")
-			//err = conn.WriteMessage(msg, response)
-			//if err != nil {
-			//	fmt.Println(err)
-			//	return
-			//}
-			fmt.Println(mail)
+
+			messages, err = gMessages.GetMessagesFromMail(mail)
+			if err == nil {
+				err = conn.WriteJSON(messages)
+			}
 			time.Sleep(5 * time.Second)
 		}
+		closeConnection(conn)
 	}
 }
 
