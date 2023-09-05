@@ -38,7 +38,7 @@ func handleWBGetMessages(sm mails.StorageMails, sc connections.StorageConnection
 
 		mail, err := sm.GetMail(uuid)
 
-		var messages []gMessages.Message
+		var messages []gMessages.InputMessage
 
 		for sc.IsLifeConnection(uuid) {
 			//msg, p, _ := conn.ReadMessage()

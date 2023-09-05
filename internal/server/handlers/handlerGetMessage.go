@@ -2,27 +2,36 @@ package handlers
 
 import (
 	"github.com/gin-gonic/gin"
+	"net/http"
+	"strings"
+	"temp-mail/internal/api/gMessages"
 )
-
-type PageData struct {
-	Sender  string
-	Date    string
-	Subject string
-	Content string
-}
 
 func handlerGetMessage() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		loadViewPage(ctx, "testSender", "testDate", "testSubject", "testContent")
+		mail := ctx.Query("mail")
+		id := ctx.Query("id")
+		if mail == "" || id == "" {
+			ctx.Status(http.StatusBadRequest)
+			return
+		}
+
+		msg, err := gMessages.ReadMessage(mail, id)
+		if err != nil {
+			ctx.Status(http.StatusBadRequest)
+			return
+		}
+
+		loadViewPage(ctx, msg.From, msg.Date, msg.Subject, repairHTML(msg.Body))
 	}
 }
 
-func loadViewPage(ctx *gin.Context, sender, date, subject, content string) {
-	pd := PageData{
-		Sender:  sender,
-		Date:    date,
-		Subject: subject,
-		Content: content,
-	}
-	ctx.HTML(200, "view.html", pd)
+func repairHTML(str string) string {
+	str = strings.ReplaceAll(str, "<HTML>", "")
+	str = strings.ReplaceAll(str, "</HTML>", "")
+	str = strings.ReplaceAll(str, "<BODY>", "")
+	str = strings.ReplaceAll(str, "</BODY>", "")
+	str = strings.ReplaceAll(str, "<div>", "")
+	str = strings.ReplaceAll(str, "</div>", "")
+	return str
 }

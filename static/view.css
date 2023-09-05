@@ -45,3 +45,7 @@ p {
 .inline {
     display: inline-block;
 }
+
+a {
+    color: black;
+}

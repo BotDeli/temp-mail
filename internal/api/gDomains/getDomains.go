@@ -13,6 +13,6 @@ func GetDomains() ([]string, error) {
 		return nil, err
 	}
 
-	domains, err := decoder.DecodeJSON[string](response)
+	domains, err := decoder.DecodeJSONToArray[string](response)
 	return domains, err
 }

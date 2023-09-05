@@ -5,6 +5,9 @@ socket.onopen = function(event) {
 
 socket.onmessage = function(event) {
     let data = event.data.slice(1, -2).split(",");
+    if (data[0] === ""){
+        return;
+    }
     let messages = decodeMessages(data);
     let ids = getHaveId();
     for (let i = 0; i < messages.length; i+=3){
@@ -66,7 +69,7 @@ function createNewMessage(id, sender, theme){
     msg.appendChild(div);
 
     let refresh = document.createElement("a");
-    refresh.href = "http://localhost:8080/message?id="+id;
+    refresh.href = "http://localhost:8080/message?mail="+mailText.innerText+"&id="+id;
     refresh.className = "message-link";
     refresh.appendChild(msg);
 
