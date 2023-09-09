@@ -1,10 +1,16 @@
 package storage
 
-import "github.com/redis/go-redis/v9"
+import (
+	"context"
+	"github.com/redis/go-redis/v9"
+	"os"
+)
 
-func ConnectToClient(nDB int) *redis.Client {
-	return redis.NewClient(&redis.Options{
-		Addr: "localhost:6379",
+func ConnectToClient(nDB int, ctx context.Context) *redis.Client {
+	client := redis.NewClient(&redis.Options{
+		Addr: os.Getenv("redis_address") + ":" + os.Getenv("redis_port"),
 		DB:   nDB,
 	})
+	pingClient(client, ctx)
+	return client
 }

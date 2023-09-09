@@ -14,6 +14,6 @@ type RedisConnections struct {
 func InitStorageConnections() StorageConnections {
 	return &RedisConnections{
 		Ctx:    context.Background(),
-		Client: storage.ConnectToClient(2),
+		Client: storage.ConnectToClient(2, context.Background()),
 	}
 }

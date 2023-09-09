@@ -1,4 +1,6 @@
-var socket = new WebSocket("ws://localhost:8080/getMessages")
+const myUrl = document.baseURI.slice(6, -1);
+
+var socket = new WebSocket("ws://"+myUrl+"/getMessages")
 socket.onopen = function(event) {
     console.log("connection open");
 };
@@ -69,7 +71,7 @@ function createNewMessage(id, sender, theme){
     msg.appendChild(div);
 
     let refresh = document.createElement("a");
-    refresh.href = "http://localhost:8080/message?mail="+mailText.innerText+"&id="+id;
+    refresh.href = "/message?mail="+mailText.innerText+"&id="+id;
     refresh.className = "message-link";
     refresh.appendChild(msg);
 

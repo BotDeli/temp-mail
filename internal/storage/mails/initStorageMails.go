@@ -16,7 +16,7 @@ type RedisMails struct {
 func InitStorageMails() StorageMails {
 	return &RedisMails{
 		Ctx:    context.Background(),
-		Client: storage.ConnectToClient(1),
+		Client: storage.ConnectToClient(1, context.Background()),
 		Dom:    domain.InitDomainsGetter(),
 	}
 }

@@ -9,7 +9,7 @@ function getMail(){
         mailText.innerText = data.mail;
     }).
     catch(err => {
-        console.error(err);
+        console.log(err);
         mailText.innerText = 'error load mail';
     });
 }

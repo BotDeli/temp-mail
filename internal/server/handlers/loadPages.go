@@ -5,13 +5,6 @@ import (
 	"html/template"
 )
 
-type PageData struct {
-	Sender  string
-	Date    string
-	Subject string
-	Content string
-}
-
 func loadMainPage(ctx *gin.Context) {
 	ctx.HTML(200, "main.html", nil)
 }
